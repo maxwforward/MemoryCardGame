@@ -63,27 +63,27 @@ int main()
 	int columns;
 
 	// Print the menu
-	cout << "Welcome to Memory!" << endl;
+	cout << endl << "Welcome to Memory!" << endl;
 	cout << "The rules are simple, pick two cards and see if they match. Continue until you've matched all of the cards!" << endl;
 	cout << "You may enter -1 for your cards at any time during the game to quit." << endl << endl;
-	// Prompt the uer for how many columns they want to play with
+	// Prompt the user for how many columns they want to play with
 	cout << "How many columns of cards do you want to play with?" << endl;
 	cout << "Minimum of 3, maximum of 13: ";
 	cin >> columns; // get number of columns from user
 
 	// Create a "dealer" array of size 4 * columns for the dealer deck of cards
 	// Create a single dimensional array of cards to work as a shuffler and dealer
-	cardStruct* dealerDeck; // make a pointer for the dynamic array
-	dealerDeck = new cardStruct[4 * columns]; // dynamically allocate the array based on the number of columns times 4
+	cardStruct* dealerDeck; // Make a pointer for the dynamic array
+	dealerDeck = new cardStruct[4 * columns]; // Dynamically allocate the array based on the number of columns times 4
 
-	// Create a variable to store size of dealer deck (how many cards are in it)
+	// Create a variable to store size of the dealer deck (how many cards are in it)
 	int sizeOfDealerDeck = 0;
 
 	// Fill the "dealer" array with cards taken from the deck
-	for (int i = 0; i < (4 * columns); i++) // repeat this loop the amount of time specified by the user
+	for (int i = 0; i < (4 * columns); i++) // Repeat this loop the amount of times specified by the user
 	{
 		dealerDeck[i] = draw(deck, sizeOfDeck); // Draw a card from the deck to place in the dealer deck
-		sizeOfDealerDeck++; // increment the siaze of the dealer deck every time you draw a card
+		sizeOfDealerDeck++; // Increment the size of the dealer deck every time you draw a card
 	}
 
 	// Shuffle the cards in the dealer deck
