@@ -46,11 +46,11 @@ bool cardMatch(cardStruct card1, cardStruct card2);
 bool checkForWin(cardStruct** playArea, int rows, int columns);
 
 //====================================================================================================================================
-// Main function - Menu of Memory Card Game
+// main function - Menu of Memory Card Game
 //====================================================================================================================================
 int main()
 {
-	// Create an array of card structs to populate with cards in order to make the deck
+	// Create an array of cardStructs to populate with cards in order to make the deck
 	cardStruct deck[52];
 
 	// Create an integer to store the size of the deck (how mny cards are in it)
@@ -112,7 +112,7 @@ int main()
 //************************************************************************************************************************************
 
 	// Check to see if the player has won (all cards turned face up)
-	while (!checkForWin(playArea, 4, columns)) // While checkForWin == false...
+	while (!checkForWin(playArea, 4, columns)) // While game has NOT been won...
 	{
 		// Print the grid of blank cards with coordinates on the outter edge
 		printGrid(playArea, 4, columns);
@@ -153,45 +153,48 @@ int main()
 		// If user enters same coordinates for cards 1 and 2 (duplicate card choices)...
 		else if (xCoordinateCard1 == xCoordinateCard2 && yCoordinateCard1 == yCoordinateCard2)
 		{
-			// Dont allow and ask to try again
+			// Dont allow and ask user to try again
 			cout << endl << "Im sorry, you entered duplicate card choices. Please try again!" << endl;
 		}
 		// If user enters choices that are out of bounds...
 		else if (xCoordinateCard1 > (columns - 1) || yCoordinateCard1 > 3 || // If coordinates for card 1 are out of bounds...
 			xCoordinateCard2 > (columns - 1) || yCoordinateCard2 > 3) // If coordinates for card 2 are out of bounds...
 		{
-			cout << endl << "Im sorry, you entered an invalid card. Please try again!" << endl; // Dont allow and ask to try again
+			// Don't allow and ask user to try again
+			cout << endl << "Im sorry, you entered an invalid card. Please try again!" << endl;
 		}
 
-		// If user inputs correct coordinates (valid indexes)
+		// If user inputs valid coordinates...
 		else
 		{
-			// Save flipped cards
+			// Store the cards located at the valid coordinates
 			cardStruct card1 = playArea[yCoordinateCard1][xCoordinateCard1];
 			cardStruct card2 = playArea[yCoordinateCard2][xCoordinateCard2];
 
-			// If user enters a card that has already been revealed
-			if (card1.faceUp == true || card2.faceUp == true) // If one of the cards is face up
+			// If the cards at the valid coordinates have already been revealed...
+			if (card1.faceUp == true || card2.faceUp == true) // If one of the cards is face up...
 			{
-				cout << endl << "Im sorry, at least one of those cards have already been chosen! Please try again" << endl; // Dont allow and ask to try again
+				// Dont allow and ask user to try again
+				cout << endl << "Im sorry, at least one of those cards have already been chosen! Please try again" << endl;
 			}
 
-			// If user enters cards that havent been revealed
+			// If the cards at the valid coordinates have NOT been revealed...
 			else
 			{
-				// After two cards have been chosen, flip them
+				// Flip the cards
 				flipCard(playArea, xCoordinateCard1, yCoordinateCard1); // Flip first card
 				flipCard(playArea, xCoordinateCard2, yCoordinateCard2); // Flip second card
 
 				// Print the grid to show flipped cards
 				printGrid(playArea, 4, columns);
 
-				// Check to see if flipped cards match
-				if (cardMatch(card1, card2)) // If true
+				// Check to see if the flipped cards match
+				if (cardMatch(card1, card2)) // If flipped cards match...
 				{
-					cout << endl << endl << "Congratulations! Its a match!" << endl; // congratulate the player and leave cards face up
+					// Congratulate the player and leave flipped cards face up
+					cout << endl << endl << "Congratulations! Its a match!" << endl;
 				}
-				else // If false
+				else // If flipped cards do NOT match...
 				{
 					cout << endl << endl << "Too bad! Not a match!" << endl;
 
@@ -205,58 +208,58 @@ int main()
 		// Have user "press a key to continue" to resume the game
 		system("pause");
 
-		// "clear the screen"
-		cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl
-			<< endl << endl << endl << endl << endl << endl << endl << endl; // output a bunch of newlines to scroll the console window
+		// Clear the screen by outputting multiple newlines to scroll the console window
+		cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl 
+			<< endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl;
 	}
 
 	// When the game is won (all cards face-up)
-	cout << endl << "Congratulations! You Won!" << endl << endl; // congratulate the player
+	cout << endl << "Congratulations! You Won!" << endl << endl; // Congratulate the player
 }
 
-/***************************************************************************************************************************************
-	Fuctions
-****************************************************************************************************************************************/
+//************************************************************************************************************************************
+//	Fuctions
+//************************************************************************************************************************************
 
-// Populate an array of size 52 with card structs to build the deck
-//======================================================================================================================================
+//====================================================================================================================================
+// buildDeck Function - Builds the deck by populating an array of size 52 with cardStructs
+//====================================================================================================================================
 void buildDeck(cardStruct* deck)
 {
-	// Initialize a cardStruct type
+	// Initialize a cardStruct
 	cardStruct card;
 
-	// This loop organizes the deck as follows: A of Hearts, A of Diamonds, A of Spades, A of Clubs, 1 of Hearts, ...
+	// This loop organizes the deck as follows: A of Hearts, A of Diamonds, A of Spades, A of Clubs, 1 of Hearts, 1 of Diamonds...
 	for (int i = 0; i < 52; i++)
 	{
 		card.value = (cardValue)(1 + (i / 4));
-
 		card.suit = (cardSuit)(1 + (i % 4));
-
 		deck[i] = card;
 	}
 }
 
-// Draws a card from the deck
-// Removes first element from an array and returns it while also "cleaning up" the array by shuffling everything down 
-//======================================================================================================================================
+//====================================================================================================================================
+// draw Function - Draws a card from the deck by removing the first element from the deck array and returning it while also 
+// "cleaning up" the array by shuffling everything down 
+//====================================================================================================================================
 cardStruct draw(cardStruct* deck, int &sizeOfDeck)
 {
-	// Define a card struct to save the first card in the deck
+	// Define a cardStruct to store the first card in the deck
 	cardStruct removedCard = deck[0];
 
-	// Define a card struct to represent an empty space where there is no card
+	// Define a cardStruct to represent an empty space where there is no card
 	cardStruct noCard;
-	noCard.value = zero; // Set the value of no card to 0
-	noCard.suit = none; // Set the suit of no card to none
+	noCard.value = zero; // Set the value to 0
+	noCard.suit = none; // Set the suit to none
 
 	// "Clean up the array"
 	// Remove the first element of the array and shuffle everything down
 	for (int i = 0; i < (sizeOfDeck - 1); i++) // Repeat this loop until you reach the last element in the array
 	{
-		deck[i] = deck[i + 1]; // replace the element with the element after it
+		deck[i] = deck[i + 1]; // Replace the element of the array with the element after it
 	}
 
-	// Sets last element of array to no card
+	// Set the last element of the array to no card
 	deck[sizeOfDeck - 1] = noCard;
 
 	// Decrement the size of the deck
@@ -266,12 +269,13 @@ cardStruct draw(cardStruct* deck, int &sizeOfDeck)
 	return removedCard;
 }
 
-// Shuffle the cards in the dealer deck
-//======================================================================================================================================
+//====================================================================================================================================
+// shuffleDeck Function - Shuffles the cards in the dealer deck
+//====================================================================================================================================
 void shuffleDeck(cardStruct* dealerDeck, int columns)
 {
-	// Shuffle the deck
-	for (int i = 0; i < ((4 * columns) / 2); i++) // Repeat this loop "half the size" amount of times
+	// Shuffle the dealer deck
+	for (int i = 0; i < ((4 * columns) / 2); i++) // Repeat this loop "half the size of the deck" amount of times
 	{
 		// Save 2 different random positions to shuffle
 		int randomPosition1 = rand() % (4 * columns); // Random int between 0 and (4 * columns)
