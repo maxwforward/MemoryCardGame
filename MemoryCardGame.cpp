@@ -63,7 +63,7 @@ int main()
 	int columns;
 
 	// Print the menu
-	cout << endl << "Welcome to Memory!" << endl;
+	cout << endl << endl << "Welcome to Memory!" << endl;
 	cout << "The rules are simple, pick two cards and see if they match. Continue until you've matched all of the cards!" << endl;
 	cout << "You may enter -1 for your cards at any time during the game to quit." << endl << endl;
 	// Prompt the user for how many columns they want to play with
@@ -72,7 +72,7 @@ int main()
 	cin >> columns; // get number of columns from user
 
 	// Create a "dealer" array of size 4 * columns for the dealer deck of cards
-	// Create a single dimensional array of cards to work as a shuffler and dealer
+	// Create a single dimension array of cards to work as a shuffler and dealer
 	cardStruct* dealerDeck; // Make a pointer for the dynamic array
 	dealerDeck = new cardStruct[4 * columns]; // Dynamically allocate the array based on the number of columns times 4
 
@@ -90,11 +90,11 @@ int main()
 	shuffleDeck(dealerDeck, columns);
 
 	// Create a 2D array for the play-area that will hold cards
-	cardStruct** playArea; // make a pointer to a pointer for the 2D array
-	playArea = new cardStruct*[4]; //allocate the number of rows in a single dimensional array of cardStruct*
+	cardStruct** playArea; // Make a pointer to a pointer for the 2D array
+	playArea = new cardStruct*[4]; // Allocate the number of rows in a single dimension array of cardStruct*
 	for (int row = 0; row < 4; row++)
 	{
-		//allocate a single dimension array to each pointer
+		// Allocate a single dimension array to each cardStruct* pointer
 		playArea[row] = new cardStruct[columns];
 	}
 
@@ -107,51 +107,58 @@ int main()
 		}
 	}
 
-	/***************************************************************************************************************************************
-		Part 2 - The Game
-	****************************************************************************************************************************************/
+//************************************************************************************************************************************
+//	Part 2 - The Game
+//************************************************************************************************************************************
 
 	// Check to see if the player has won (all cards turned face up)
-	while (!checkForWin(playArea, 4, columns)) // While checkForWin = false
+	while (!checkForWin(playArea, 4, columns)) // While checkForWin == false...
 	{
 		// Print the grid of blank cards with coordinates on the outter edge
 		printGrid(playArea, 4, columns);
 
-		//Initialize integer variables to store coordinates
+		// Initialize integer variables to store coordinates
 		int xCoordinateCard1;
 		int yCoordinateCard1;
 		int xCoordinateCard2;
 		int yCoordinateCard2;
 
 		// Prompt the user for two cards to choose using the coordinates
-		cout << endl << endl << "Choose card 1: ";
-		cin >> xCoordinateCard1 >> yCoordinateCard1; // get coordinates of first card 
-		cout << "Choose card 2: ";
-		cin >> xCoordinateCard2 >> yCoordinateCard2; // get coordinates of second card
+		cout << endl << endl << "Choose column # for card 1: ";
+		cin >> xCoordinateCard1;
+		cout << "Choose row # for card 1: ";
+		cin >> yCoordinateCard1;
+		cout << "Choose column # for card 2: ";
+		cin >> xCoordinateCard2;
+		cout << "Choose row # for card 2: ";
+		cin >> yCoordinateCard2;
 
 		// Check for bad inputs
-		// If user enters input that is not an integer
-		if (cin.fail()) // returns true in input is not correct type
+		// If user enters input that is not an integer...
+		if (cin.fail()) // Returns true if input is not correct type
 		{
-			cout << endl << endl << "Im sorry, you entered an invalid card. Please try again!" << endl; // Dont allow and ask to try again
+			// Dont allow and ask user to try again
+			cout << endl << endl << "Im sorry, you entered an invalid card. Please try again!" << endl;
 			cin.clear();
 			cin.ignore(1000, '\n');
 		}
-		// If user enters negative numbers
-		else if (xCoordinateCard1 < 0 || yCoordinateCard1 < 0 || // If user enters negative numbers for card 1
-			xCoordinateCard2 < 0 || yCoordinateCard2 < 0) // If user enters negative numbers for card 2
+		// If user enters negative numbers...
+		else if (xCoordinateCard1 < 0 || yCoordinateCard1 < 0 || // If user enters negative numbers for card 1...
+			xCoordinateCard2 < 0 || yCoordinateCard2 < 0) // If user enters negative numbers for card 2...
 		{
+			// Quit game
 			cout << endl << "Goodbye!" << endl;
 			return 0;
 		}
-		// If user enters duplicate card choices
-		else if (xCoordinateCard1 == xCoordinateCard2 && yCoordinateCard1 == yCoordinateCard2) // if the coordinates for both cards are the same
+		// If user enters same coordinates for cards 1 and 2 (duplicate card choices)...
+		else if (xCoordinateCard1 == xCoordinateCard2 && yCoordinateCard1 == yCoordinateCard2)
 		{
-			cout << endl << "Im sorry, you entered duplicate card choices. Please try again!" << endl; // Dont allow and ask to try again
+			// Dont allow and ask to try again
+			cout << endl << "Im sorry, you entered duplicate card choices. Please try again!" << endl;
 		}
-		// If user enters choices that are out of bounds
-		else if (xCoordinateCard1 > (columns - 1) || yCoordinateCard1 > 3 || // If user enters coordinates for card 1 that are out of bounds
-			xCoordinateCard2 > (columns - 1) || yCoordinateCard2 > 3) // If user enters coordinates for card 1 that are out of bounds
+		// If user enters choices that are out of bounds...
+		else if (xCoordinateCard1 > (columns - 1) || yCoordinateCard1 > 3 || // If coordinates for card 1 are out of bounds...
+			xCoordinateCard2 > (columns - 1) || yCoordinateCard2 > 3) // If coordinates for card 2 are out of bounds...
 		{
 			cout << endl << "Im sorry, you entered an invalid card. Please try again!" << endl; // Dont allow and ask to try again
 		}
